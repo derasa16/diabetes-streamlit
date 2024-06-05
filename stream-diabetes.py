@@ -57,8 +57,15 @@ if st.button('Test Prediksi Diabetes'):
                                     int(Systolic_Blood_Pressure), int(Heart_Rate), float(Body_Temperature),
                                     int(SPO2), int(Sweating), int(Shivering)]])
             
+            # Pisahkan fitur yang perlu dinormalisasi
+            input_data_to_scale = input_data[:, :7]
+            input_data_not_to_scale = input_data[:, 7:]
+
             # Normalisasi data input menggunakan scaler yang sudah dilatih
-            input_data = scaler.transform(input_data)
+            input_data_scaled = scaler.transform(input_data_to_scale)
+
+            # Gabungkan kembali data yang telah dinormalisasi dengan fitur non-numerik
+            input_data = np.concatenate((input_data_scaled, input_data_not_to_scale), axis=1)
             
             # Lakukan prediksi
             diab_prediction = diabetes_model.predict(input_data)
