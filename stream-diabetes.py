@@ -70,12 +70,16 @@ if st.button('Test Prediksi Diabetes'):
             # Lakukan prediksi
             diab_prediction = diabetes_model.predict(input_data)
             
-           # Pastikan hasil prediksi diubah menjadi nilai tunggal sebelum dibandingkan
-        if (diab_prediction[0] == [1, 0]).all():
-            diab_diagnosis = 'Pasien Terkena Diabetes'
-        else:
-            diab_diagnosis = 'Pasien Tidak Terkena Diabetes'
+            # Ambil argmax dari hasil prediksi untuk mendapatkan kelas dengan probabilitas tertinggi
+            predicted_class = np.argmax(diab_prediction, axis=1)[0]
+            
+            if predicted_class == 1:
+                diab_diagnosis = 'Pasien Terkena Diabetes'
+            else:
+                diab_diagnosis = 'Pasien Tidak Terkena Diabetes'
 
-        st.success(diab_diagnosis)
+            st.success(diab_diagnosis)
+        else:
+            st.error('Semua input harus diisi')
     except ValueError as e:
         st.error(f'Error dalam konversi input: {e}')
