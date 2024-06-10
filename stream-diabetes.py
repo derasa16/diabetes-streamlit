@@ -57,6 +57,9 @@ if st.button('Test Prediksi Diabetes'):
                                     int(Systolic_Blood_Pressure), int(Heart_Rate), float(Body_Temperature),
                                     int(SPO2), int(Sweating), int(Shivering)]])
             
+            # Debug: Lihat data input sebelum normalisasi
+            st.write("Input data (before scaling):", input_data)
+            
             # Pisahkan fitur yang perlu dinormalisasi
             input_data_to_scale = input_data[:, :7]
             input_data_not_to_scale = input_data[:, 7:]
@@ -64,11 +67,17 @@ if st.button('Test Prediksi Diabetes'):
             # Normalisasi data input menggunakan scaler yang sudah dilatih
             input_data_scaled = scaler.transform(input_data_to_scale)
 
+            # Debug: Lihat data yang sudah dinormalisasi
+            st.write("Input data (after scaling):", input_data_scaled)
+
             # Gabungkan kembali data yang telah dinormalisasi dengan fitur non-numerik
             input_data = np.concatenate((input_data_scaled, input_data_not_to_scale), axis=1)
             
             # Lakukan prediksi
             diab_prediction = diabetes_model.predict(input_data)
+            
+            # Debug: Lihat output prediksi dari model
+            st.write("Prediction output:", diab_prediction)
             
             # Ambil argmax dari hasil prediksi untuk mendapatkan kelas dengan probabilitas tertinggi
             predicted_class = np.argmax(diab_prediction, axis=1)[0]
